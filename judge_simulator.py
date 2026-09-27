@@ -20,24 +20,26 @@ Author: magicpin AI Challenge Team
 # ██████  CONFIGURATION - EDIT THIS SECTION ██████
 # =============================================================================
 
+import os
+
 # Your bot's URL (where your bot is running)
-BOT_URL = "http://localhost:8080"
+BOT_URL = os.environ.get("BOT_URL", "https://magicpin-vera-bot-0nqs.onrender.com")
 
 # Choose your LLM provider: "openai", "anthropic", "gemini", "deepseek", "groq", "ollama", "openrouter"
 LLM_PROVIDER = "gemini"
 
 def _get_api_key():
     import os
-    if os.environ.get("GEMINI_API_KEY"):
-        return os.environ["GEMINI_API_KEY"]
-    if os.environ.get("LLM_API_KEY"):
-        return os.environ["LLM_API_KEY"]
     if os.path.exists("api_keys"):
         with open("api_keys", "r", encoding="utf-8") as f:
             for line in f:
                 line = line.strip()
                 if line and not line.startswith("#") and "key" not in line.lower():
                     return line
+    if os.environ.get("GEMINI_API_KEY"):
+        return os.environ["GEMINI_API_KEY"]
+    if os.environ.get("LLM_API_KEY"):
+        return os.environ["LLM_API_KEY"]
     return ""
 
 LLM_API_KEY = _get_api_key()
