@@ -591,6 +591,18 @@ class ContextPushBody(BaseModel):
     delivered_at: Optional[str] = None
 
 
+@app.get("/")
+async def root():
+    return {
+        "service": "magicpin Vera Merchant AI Assistant",
+        "status": "online",
+        "version": "2.0.0",
+        "documentation": "/docs",
+        "health": "/v1/healthz",
+        "metadata": "/v1/metadata",
+    }
+
+
 @app.get("/v1/healthz")
 async def healthz():
     """Liveness probe returning uptime and loaded contexts count."""
@@ -768,5 +780,6 @@ async def handle_reply(body: ReplyBody):
 
 if __name__ == "__main__":
     import uvicorn
-    print("[INFO] Starting Vera Merchant Assistant on port 8080...")
-    uvicorn.run(app, host="0.0.0.0", port=8080)
+    port = int(os.environ.get("PORT", 8080))
+    print(f"[INFO] Starting Vera Merchant Assistant on port {port}...")
+    uvicorn.run(app, host="0.0.0.0", port=port)
